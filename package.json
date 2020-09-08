@@ -1,0 +1,14 @@
+{
+  "name": "awkward_storyteller",
+  "version": "1.0.0",
+  "author": "Todd McNeill",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start:server": "yarn workspace server start",
+    "start:client": "yarn workspace client start"
+  }
+}
