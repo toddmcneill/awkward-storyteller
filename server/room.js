@@ -1,3 +1,5 @@
+const { broadcastToNotInRoom } = require('./player')
+
 const rooms = []
 
 class Room {
@@ -11,10 +13,16 @@ class Room {
     this.players = [player]
 
     rooms.push(this)
+
+    // Send the updated room list to all players not in a room.
+    broadcastToNotInRoom({ event: 'room_list_updated', roomList: formatRooms() })
   }
 
   addPlayer(player) {
     this.players.push(player)
+
+    // Notify others in this room that this player joined.
+    this.broadcast({ event: 'player_list_updated', playerList: this.formatPlayerList() })
   }
 
   removePlayer(player) {
@@ -24,11 +32,17 @@ class Room {
     if (this.owner === player && this.players.length > 0) {
       this.owner = this.players[0]
     }
+
+    // Notify others in this room that this player left.
+    this.broadcast({ event: 'player_list_updated', playerList: this.formatPlayerList() })
+
+    // Send the player the updated room list.
+    player.send({ event: 'room_list_updated', roomList: formatRooms() })
   }
 
   generateCode() {
     while (true) {
-      // Generate a random 5-character string
+      // Generate a short, random string
       const code = Math.random().toString(36).substring(7)
       if (rooms.find(room => room.code === code)) {
         continue

@@ -1,5 +1,5 @@
 const ws = require('ws')
-const { Player, broadcastToAll } = require('./player')
+const { Player } = require('./player')
 const { Room, findRoomByCode, formatRooms } = require('./room')
 
 const port = 8080
@@ -10,6 +10,7 @@ console.log(`server listening on port ${server.options.port}`)
 server.on('connection', (socket) => {
   const player = new Player(socket)
 
+  // Give the player a list of the rooms.
   player.send({ event: 'room_list_updated', roomList: formatRooms() })
 
   socket.on('message', (message) => {
@@ -47,36 +48,21 @@ server.on('connection', (socket) => {
 
 function createRoom(player) {
   const room = new Room(player)
-  player.setRoom(room)
-  player.send({ event: 'room_joined', roomCode: room.code })
-  player.send({ event: 'player_list_updated', playerList: room.formatPlayerList() })
-  broadcastToAll({ event: 'room_list_updated', roomList: formatRooms() })
+  player.joinRoom(room)
 }
 
 function joinRoom(player, code) {
   const room = findRoomByCode(code)
-  if (!room) {
-    player.send({ event: 'room_not_found' })
-    return
-  }
-  player.setRoom(room)
+  player.joinRoom(room)
   room.addPlayer(player)
-  player.send({ event: 'room_joined', roomCode: room.code })
-  room.broadcast({ event: 'player_list_updated', playerList: room.formatPlayerList() })
 }
 
 function leaveRoom(player) {
   const room = player.room
   room.removePlayer(player)
-  player.setRoom(null)
-  player.send({ event: 'room_left' })
-  room.broadcast({ event: 'player_list_updated', playerList: room.formatPlayerList() })
+  player.leaveRoom()
 }
 
 function setPlayerName(player, name) {
   player.setName(name)
-  player.send({ event: 'player_updated', player: player.format() })
-  if (player.room) {
-    player.room.broadcast({ event: 'player_list_updated', playerList: player.room.formatPlayerList() })
-  }
 }

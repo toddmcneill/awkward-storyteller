@@ -4,7 +4,6 @@ import PlayerName from './components/PlayerName'
 function App() {
   let ws = useRef()
 
-  let [errorMessage, setErrorMessage] = useState(null)
   let [roomList, setRoomList] = useState([])
   let [playerName, setPlayerName] = useState(null)
   let [roomCode, setRoomCode] = useState(null)
@@ -47,10 +46,6 @@ function App() {
 
           case 'room_left':
             setRoomCode(null)
-            break
-
-          case 'room_not_found':
-            setErrorMessage('Room Not Found')
             break
 
           case 'player_updated':
