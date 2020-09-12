@@ -20,7 +20,7 @@ export default function PlayerName({ playerName, handleSubmit }) {
   if (playerName && !showInput) {
     return <div>
       <div>You are: {playerName}</div>
-      <button onClick={setShowInput}>Change</button>
+      <button onClick={handleChangeClick}>Change</button>
     </div>
   } else {
     return (

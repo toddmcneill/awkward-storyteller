@@ -4,11 +4,11 @@ import PlayerName from './components/PlayerName'
 function App() {
   let ws = useRef()
 
+  let [socketConnected, setSocketConnected] = useState(false)
   let [roomList, setRoomList] = useState([])
   let [playerName, setPlayerName] = useState(null)
   let [roomCode, setRoomCode] = useState(null)
   let [playerList, setPlayerList] = useState([])
-  let [socketConnected, setSocketConnected] = useState(false)
 
   useEffect(() => {
     const protocol = 'ws'
@@ -112,7 +112,7 @@ function App() {
       <div>Room List:</div>
       <ul>
       {roomList.map((room, i) => {
-        return <li><button key={i} onClick={() => handleJoinRoom(room.code)}>Join {room.code}</button></li>
+        return <li key={i}><button onClick={() => handleJoinRoom(room.code)}>Join {room.code}</button></li>
       })}
       </ul>
     </>
