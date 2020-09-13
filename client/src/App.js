@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './App.module.css'
-import { handleEvent } from './wsEvents'
+import { SendMessageContext, handleEvent, Events, registerHandler, unregisterHandler } from './webSocket'
 import Chrome from './components/Chrome'
-import PlayerName from './components/PlayerName'
+
+export const AppContext = React.createContext()
 
 function App() {
   let ws = useRef()
@@ -22,12 +23,10 @@ function App() {
       ws.current = new WebSocket(`${protocol}://${host}:${port}`)
 
       ws.current.onerror = () => console.log(`Websocket error`)
-      ws.current.onopen = () => {
-        console.log(`Websocket connection established`)
-        setSocketConnected(true)
-      }
+      ws.current.onopen = () => setSocketConnected(true)
       ws.current.onclose = () => console.log(`Websocket connection closed`)
       ws.current.onmessage = (event) => {
+        // Parse the event.
         let data
         try {
           data = JSON.parse(event.data)
@@ -35,39 +34,46 @@ function App() {
           console.error('event.data is not an object: ', event.data)
           return
         }
-        console.log('data received: ', data)
 
-        handleEvent(data.event, data)
-
-        switch (data.event) {
-          case 'room_list_updated':
-            setRoomList(data.roomList)
-            break
-
-          case 'room_joined':
-            setRoomCode(data.roomCode)
-            break
-
-          case 'room_left':
-            setRoomCode(null)
-            break
-
-          case 'player_updated':
-            setPlayerName(data.player.name)
-            break
-
-          case 'player_list_updated':
-            setPlayerList(data.playerList)
-            break
-
-          default:
-            console.error(`unknown event: ${data.event}`)
+        // Ensure the event is valid.
+        if (!Object.values(Events).includes(data.event)) {
+          console.error(`unknown event: ${data.event}`)
+          return
         }
+
+        // Handle the event.
+        console.log('data received: ', data)
+        handleEvent(data.event, data)
       }
     }
 
     return () => {
       ws.close()
+    }
+  }, [])
+
+  useEffect(() => {
+    const keys = [
+      registerHandler(Events.ROOM_LIST_UPDATED, ({ roomList }) => {
+        setRoomList(roomList)
+      }),
+      registerHandler(Events.ROOM_JOINED, (data) => {
+        setRoomCode(data.roomCode)
+      }),
+      registerHandler(Events.ROOM_LEFT, () => {
+        setRoomCode(null)
+        setPlayerList([])
+      }),
+      registerHandler(Events.PLAYER_UPDATED, (data) => {
+        setPlayerName(data.player.name)
+      }),
+      registerHandler(Events.PLAYER_LIST_UPDATED, (data) => {
+        setPlayerList(data.playerList)
+      })
+    ]
+
+    return () => {
+      keys.map(key => unregisterHandler(key))
     }
   }, [])
 
@@ -86,61 +92,21 @@ function App() {
     ws.current.send(JSON.stringify(message))
   }
 
-  function handleCreateRoom() {
-    sendMessage({
-      command: 'create_room'
-    })
+  const appState = {
+    roomList,
+    playerName,
+    roomCode,
+    playerList
   }
 
-  function handleJoinRoom(roomCode) {
-    sendMessage({
-      command: 'join_room',
-      roomCode
-    })
-  }
-
-  function handleLeaveRoom() {
-    sendMessage({
-      command: 'leave_room'
-    })
-  }
-
-  function handlePlayerNameSubmit(newPlayerName) {
-    sendMessage({
-      command: 'set_player_name',
-      playerName: newPlayerName
-    })
-  }
-
-  let content
-
-  if (!roomCode) {
-    content = <>
-      <button onClick={handleCreateRoom}>Create Room</button>
-      <div>Room List:</div>
-      <ul>
-      {roomList.map((room, i) => {
-        return <li key={i}><button onClick={() => handleJoinRoom(room.code)}>Join {room.code}</button></li>
-      })}
-      </ul>
-    </>
-  } else {
-    content = <>
-      <div>Room Code: {roomCode}</div>
-      <button onClick={handleLeaveRoom}>Leave Room</button>
-      <div>Player List:</div>
-      <ul>
-        {playerList.map((player, i) => <li key={i}>{player.name}</li>)}
-      </ul>
-    </>
-  }
+  console.log('app state: ', appState)
 
   return (
-    <div>
-      <Chrome roomList={roomList} playerName={playerName} roomCode={roomCode} playerList={playerList} />
-      <PlayerName playerName={playerName} handleSubmit={handlePlayerNameSubmit} />
-      {content}
-    </div>
+    <AppContext.Provider value={appState}>
+      <SendMessageContext.Provider value={sendMessage}>
+        <Chrome />
+      </SendMessageContext.Provider>
+    </AppContext.Provider>
   )
 }
 

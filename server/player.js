@@ -27,6 +27,7 @@ class Player {
 
     // Tell the player the room code they joined.
     this.send({ event: 'room_joined', roomCode: room.code })
+    this.send({ event: 'player_list_updated', playerList: this.room.formatPlayerList() })
   }
 
   leaveRoom() {

@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { SendMessageContext, Commands } from '../webSocket'
+import styles from './PlayerName.module.css'
 
-export default function PlayerName({ playerName, handleSubmit }) {
+export default function PlayerName({ playerName }) {
   const [playerNameInput, setPlayerNameInput] = useState('')
   const [showInput, setShowInput] = useState(false)
+
+  const sendMessage = useContext(SendMessageContext)
 
   function handlePlayerNameInput(e) {
     setPlayerNameInput(e.target.value)
@@ -14,20 +18,34 @@ export default function PlayerName({ playerName, handleSubmit }) {
 
   function handleNameSubmit() {
     setShowInput(false)
-    handleSubmit(playerNameInput)
+    sendMessage({
+      command: Commands.SET_PLAYER_NAME,
+      playerName: playerNameInput
+    })
+  }
+
+  function handleKeyDown(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault()
+      handleNameSubmit()
+    }
   }
 
   if (playerName && !showInput) {
     return <div>
-      <div>You are: {playerName}</div>
-      <button onClick={handleChangeClick}>Change</button>
+      <div className={styles.nameDisplay} onClick={handleChangeClick}>Hello, {playerName}!</div>
     </div>
   } else {
     return (
       <div>
-        <span>Enter your name:</span>
-        <input type='text' onInput={handlePlayerNameInput} />
-        <button onClick={handleNameSubmit}>Submit</button>
+        <input
+          type='text'
+          className={styles.nameInput}
+          onInput={handlePlayerNameInput}
+          onKeyDown={handleKeyDown}
+          onBlur={handleNameSubmit}
+          placeholder='Enter your name'
+        />
       </div>
     )
   }

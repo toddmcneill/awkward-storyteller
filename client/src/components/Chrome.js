@@ -1,16 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AppContext } from '../App'
 import styles from './Chrome.module.css'
 import Title from './Title'
-import RoomList from './RoomList'
+import RoomSelection from './RoomSelection'
+import PlayerName from "./PlayerName";
+import RoomInfo from "./RoomInfo";
 
-export default function Chrome({ roomList, playerName, roomCode, playerList }) {
+export default function Chrome() {
+  const appState = useContext(AppContext)
+
   return <div className={styles.grid}>
     <div className={styles.header}><Title /></div>
-    <div className={styles.roomList}><RoomList /></div>
-    <div className={styles.playerName}>Player name</div>
-    <div>C</div>
-    <div>D</div>
-    <div>E</div>
-    <div className={styles.footer}>E</div>
+    <div className={styles.main}>{
+      appState.roomCode ?
+        `In room: ${appState.roomCode}` :
+        <RoomSelection />
+    }</div>
+    <div><PlayerName playerName={appState.playerName} /></div>
+    <div><RoomInfo /></div>
+    <div className={styles.footer}>Footer</div>
   </div>
 }

@@ -1,3 +1,7 @@
+import React from 'react'
+
+export const SendMessageContext = React.createContext()
+
 const handlers = {}
 let key = 0
 
@@ -39,10 +43,17 @@ export function handleEvent(event, data) {
   })
 }
 
-export const events = {
+export const Events = {
   ROOM_LIST_UPDATED: 'room_list_updated',
   ROOM_JOINED: 'room_joined',
   ROOM_LEFT: 'room_left',
   PLAYER_UPDATED: 'player_updated',
   PLAYER_LIST_UPDATED: 'player_list_updated'
+}
+
+export const Commands = {
+  CREATE_ROOM: 'create_room',
+  JOIN_ROOM: 'join_room',
+  LEAVE_ROOM: 'leave_room',
+  SET_PLAYER_NAME: 'set_player_name'
 }

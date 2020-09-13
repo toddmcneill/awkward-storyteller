@@ -28,7 +28,7 @@ class Room {
   removePlayer(player) {
     this.players.splice(this.players.findIndex(p => p === player), 1)
 
-    // Set a new owner
+    // Set a new owner.
     if (this.owner === player && this.players.length > 0) {
       this.owner = this.players[0]
     }
