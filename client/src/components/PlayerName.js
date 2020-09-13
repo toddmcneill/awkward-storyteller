@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 export default function PlayerName({ playerName, handleSubmit }) {
   const [playerNameInput, setPlayerNameInput] = useState('')

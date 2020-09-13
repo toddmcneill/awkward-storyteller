@@ -1,0 +1,22 @@
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-gap: 10px;
+}
+
+.gridBox {
+  padding: 20px;
+  font-size: 150%;
+}
+
+.gridBoxFullWidth {
+  grid-column: 1/4;
+}
+
+.gridHeader {
+  composes: gridBoxFullWidth;
+}
+
+.gridFooter {
+  composes: gridBoxFullWidth;
+}

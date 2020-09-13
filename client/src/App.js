@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react'
+import styles from './App.css'
+import Chrome from './components/Chrome'
 import PlayerName from './components/PlayerName'
 
 function App() {
@@ -130,6 +132,7 @@ function App() {
 
   return (
     <div>
+      <Chrome />
       <PlayerName playerName={playerName} handleSubmit={handlePlayerNameSubmit} />
       {content}
     </div>
@@ -137,4 +140,4 @@ function App() {
 
 }
 
-export default App;
+export default App
