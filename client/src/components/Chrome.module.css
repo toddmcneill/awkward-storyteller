@@ -1,22 +1,30 @@
-.mainGrid {
+.grid {
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
   grid-gap: 10px;
 }
 
-.gridBox {
+.grid > div {
   padding: 20px;
   font-size: 150%;
+  background-color: var(--fg-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  border: 2px solid black;
 }
 
-.gridBoxFullWidth {
+.roomList {
+  grid-column: 1/3;
+}
+
+.fullWidth {
   grid-column: 1/4;
 }
 
-.gridHeader {
-  composes: gridBoxFullWidth;
+.header {
+  composes: fullWidth;
 }
 
-.gridFooter {
-  composes: gridBoxFullWidth;
+.footer {
+  composes: fullWidth;
 }

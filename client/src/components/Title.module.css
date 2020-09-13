@@ -2,22 +2,17 @@
   font-family: sans-serif;
   display: grid;
   grid-template-columns: 1fr 0fr 1fr;
-  border: 2px solid black;
-  border-radius: 5px;
-  padding: 20px;
-  background-color: white;
-  color: black;
 }
 
 .the {
   text-transform: lowercase;
-  font-size: 80%;
+  font-size: 75%;
 }
 
 .awkward {
   text-transform: uppercase;
   font-weight: 900;
-  font-size: 120%;
+  font-size: 140%;
   white-space: nowrap;
   line-height: 0.8em;
 }
@@ -25,7 +20,7 @@
 .storyteller {
   text-transform: lowercase;
   text-align: right;
-  font-size: 80%;
+  font-size: 75%;
 }
 
 .mirrored {

@@ -6,7 +6,7 @@ export default function Title() {
     <div></div>
     <div>
       <div className={styles.the}>The</div>
-      <div className={styles.awkward}>Awkward<span className={styles.mirrored}>r</span>d</div>
+      <div className={styles.awkward}>Awkwa<span className={styles.mirrored}>r</span>d</div>
       <div className={styles.storyteller}>Storyteller</div>
     </div>
     <div></div>

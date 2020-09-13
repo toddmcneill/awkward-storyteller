@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
-import styles from './App.css'
+import React, { useState, useEffect, useRef } from 'react'
+import './App.module.css'
+import { handleEvent } from './wsEvents'
 import Chrome from './components/Chrome'
 import PlayerName from './components/PlayerName'
 
@@ -36,6 +37,7 @@ function App() {
         }
         console.log('data received: ', data)
 
+        handleEvent(data.event, data)
 
         switch (data.event) {
           case 'room_list_updated':
@@ -63,7 +65,11 @@ function App() {
         }
       }
     }
-  })
+
+    return () => {
+      ws.close()
+    }
+  }, [])
 
   function sendMessage(message, attempt = 0, maxAttempts = 5) {
     if (!socketConnected) {
@@ -129,15 +135,13 @@ function App() {
     </>
   }
 
-
   return (
     <div>
-      <Chrome />
+      <Chrome roomList={roomList} playerName={playerName} roomCode={roomCode} playerList={playerList} />
       <PlayerName playerName={playerName} handleSubmit={handlePlayerNameSubmit} />
       {content}
     </div>
   )
-
 }
 
 export default App

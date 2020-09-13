@@ -1,0 +1,38 @@
+:root {
+  --bg-color: #646;
+  --fg-color: white;
+  --accent-color: #444;
+  --text-color: black;
+  --alt-text-color: white;
+  --highlight-color: #646;
+}
+
+body {
+  margin: 20px;
+  min-height: 100%;
+  background-color: var(--bg-color);
+  color: var(--alt-text-color);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+.button {
+  border: 1px solid black;
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 2px 10px;
+  background-color: var(--accent-color);
+  color: var(--alt-text-color);
+}
+
+.button:hover {
+  background-color: var(--highlight-color);
+}
