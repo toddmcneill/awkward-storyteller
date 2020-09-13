@@ -3,8 +3,9 @@ import { AppContext } from '../App'
 import styles from './Chrome.module.css'
 import Title from './Title'
 import RoomSelection from './RoomSelection'
-import PlayerName from "./PlayerName";
-import RoomInfo from "./RoomInfo";
+import PlayerName from './PlayerName';
+import RoomInfo from './RoomInfo';
+import Game from './Game'
 
 export default function Chrome() {
   const appState = useContext(AppContext)
@@ -13,7 +14,7 @@ export default function Chrome() {
     <div className={styles.header}><Title /></div>
     <div className={styles.main}>{
       appState.roomCode ?
-        `In room: ${appState.roomCode}` :
+        <Game /> :
         <RoomSelection />
     }</div>
     <div><PlayerName playerName={appState.playerName} /></div>

@@ -10,6 +10,7 @@ function App() {
 
   let [socketConnected, setSocketConnected] = useState(false)
   let [roomList, setRoomList] = useState([])
+  let [playerId, setPlayerId] = useState(null)
   let [playerName, setPlayerName] = useState(null)
   let [roomCode, setRoomCode] = useState(null)
   let [playerList, setPlayerList] = useState([])
@@ -65,6 +66,7 @@ function App() {
         setPlayerList([])
       }),
       registerHandler(Events.PLAYER_UPDATED, (data) => {
+        setPlayerId(data.player.id)
         setPlayerName(data.player.name)
       }),
       registerHandler(Events.PLAYER_LIST_UPDATED, (data) => {
@@ -77,11 +79,11 @@ function App() {
     }
   }, [])
 
-  function sendMessage(message, attempt = 0, maxAttempts = 5) {
+  function sendMessage(command, message, attempt = 0, maxAttempts = 5) {
     if (!socketConnected) {
       if (attempt < maxAttempts) {
         setTimeout(() => {
-          sendMessage(message, attempt + 1, maxAttempts)
+          sendMessage(command, message, attempt + 1, maxAttempts)
         }, 10 * attempt * attempt)
         return
       } else {
@@ -89,17 +91,16 @@ function App() {
       }
     }
 
-    ws.current.send(JSON.stringify(message))
+    ws.current.send(JSON.stringify({ command, ...message }))
   }
 
   const appState = {
-    roomList,
+    playerId,
     playerName,
+    roomList,
     roomCode,
     playerList
   }
-
-  console.log('app state: ', appState)
 
   return (
     <AppContext.Provider value={appState}>

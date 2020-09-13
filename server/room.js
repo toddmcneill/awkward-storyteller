@@ -1,4 +1,5 @@
 const { broadcastToNotInRoom } = require('./player')
+const { Game } = require('./game')
 
 const rooms = []
 
@@ -6,11 +7,13 @@ class Room {
   code
   owner
   players
+  game
 
   constructor(player) {
     this.code = this.generateCode()
     this.owner = player
     this.players = [player]
+    this.game = new Game(this)
 
     rooms.push(this)
 
@@ -49,6 +52,11 @@ class Room {
       }
       return code
     }
+  }
+
+  startGame() {
+    this.game.start()
+    this.broadcast({ event: 'game_state_updated', game: this.game.format() })
   }
 
   format() {

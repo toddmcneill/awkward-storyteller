@@ -2,11 +2,13 @@ const players = []
 
 class Player {
   socket
+  id
   name = 'Unknown Player'
   room
 
-  constructor(socket) {
+  constructor(socket, id) {
     this.socket = socket
+    this.id = id
     players.push(this)
   }
 
@@ -40,9 +42,18 @@ class Player {
     this.send({ event: 'room_left' })
   }
 
+  isOwner() {
+    if (!this.room) {
+      return false
+    }
+    return this.room.owner === this
+  }
+
   format() {
     return {
-      name: this.name
+      id: this.id,
+      name: this.name,
+      isOwner: this.isOwner()
     }
   }
 

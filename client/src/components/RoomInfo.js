@@ -9,15 +9,11 @@ export default function RoomInfo() {
   const sendMessage = useContext(SendMessageContext)
 
   function handleCreateRoom() {
-    sendMessage({
-      command: Commands.CREATE_ROOM
-    })
+    sendMessage(Commands.CREATE_ROOM)
   }
 
   function handleLeaveRoom() {
-    sendMessage({
-      command: Commands.LEAVE_ROOM
-    })
+    sendMessage(Commands.LEAVE_ROOM)
   }
 
   if (!appState.roomCode) {
@@ -30,7 +26,13 @@ export default function RoomInfo() {
       <Button onClick={handleLeaveRoom}>Leave</Button>
     </div>
     <ul>
-      {appState.playerList.map((player, i) => <li key={i}>{player.name}</li>)}
+      {appState.playerList.map((player, i) => <li
+        key={i}
+        className={player.id === appState.playerId ? styles.self : undefined}
+      >
+        {player.name}
+        {player.isOwner && '⭐'}
+      </li>)}
     </ul>
   </>
 }

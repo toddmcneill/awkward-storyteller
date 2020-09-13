@@ -1,10 +1,11 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef, useEffect } from 'react'
 import { SendMessageContext, Commands } from '../webSocket'
 import styles from './PlayerName.module.css'
 
 export default function PlayerName({ playerName }) {
   const [playerNameInput, setPlayerNameInput] = useState('')
   const [showInput, setShowInput] = useState(false)
+  const inputRef = useRef()
 
   const sendMessage = useContext(SendMessageContext)
 
@@ -18,10 +19,7 @@ export default function PlayerName({ playerName }) {
 
   function handleNameSubmit() {
     setShowInput(false)
-    sendMessage({
-      command: Commands.SET_PLAYER_NAME,
-      playerName: playerNameInput
-    })
+    sendMessage(Commands.SET_PLAYER_NAME, { playerName: playerNameInput })
   }
 
   function handleKeyDown(e) {
@@ -30,6 +28,12 @@ export default function PlayerName({ playerName }) {
       handleNameSubmit()
     }
   }
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [showInput])
 
   if (playerName && !showInput) {
     return <div>
@@ -45,6 +49,7 @@ export default function PlayerName({ playerName }) {
           onKeyDown={handleKeyDown}
           onBlur={handleNameSubmit}
           placeholder='Enter your name'
+          ref={inputRef}
         />
       </div>
     )

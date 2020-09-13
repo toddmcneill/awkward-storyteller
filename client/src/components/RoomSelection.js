@@ -10,10 +10,7 @@ export default function RoomSelection() {
   const sendMessage = useContext(SendMessageContext)
 
   function handleJoinRoom(code) {
-    sendMessage({
-      command: Commands.JOIN_ROOM,
-      roomCode: code
-    })
+    sendMessage(Commands.JOIN_ROOM, { roomCode: code })
   }
 
   return <div>

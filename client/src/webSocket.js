@@ -48,12 +48,14 @@ export const Events = {
   ROOM_JOINED: 'room_joined',
   ROOM_LEFT: 'room_left',
   PLAYER_UPDATED: 'player_updated',
-  PLAYER_LIST_UPDATED: 'player_list_updated'
+  PLAYER_LIST_UPDATED: 'player_list_updated',
+  GAME_STATE_UPDATED: 'game_state_updated',
 }
 
 export const Commands = {
   CREATE_ROOM: 'create_room',
   JOIN_ROOM: 'join_room',
   LEAVE_ROOM: 'leave_room',
-  SET_PLAYER_NAME: 'set_player_name'
+  SET_PLAYER_NAME: 'set_player_name',
+  START_GAME: 'start_game',
 }

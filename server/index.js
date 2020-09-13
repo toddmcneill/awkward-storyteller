@@ -3,14 +3,16 @@ const { Player } = require('./player')
 const { Room, findRoomByCode, formatRooms } = require('./room')
 
 const port = 8080
-
 const server = new ws.Server({port})
 console.log(`server listening on port ${server.options.port}`)
 
-server.on('connection', (socket) => {
-  const player = new Player(socket)
+let playerId = 0;
 
-  // Give the player a list of the rooms.
+server.on('connection', (socket) => {
+  const player = new Player(socket, playerId++)
+
+  // Give the player their id and a list of the rooms.
+  player.send({ event: 'player_updated', player: player.format() })
   player.send({ event: 'room_list_updated', roomList: formatRooms() })
 
   socket.on('message', (message) => {
@@ -40,6 +42,10 @@ server.on('connection', (socket) => {
         setPlayerName(player, data.playerName)
         break
 
+      case 'start_game':
+        startGame(player)
+        break
+
       default:
         console.error(`unknown command: ${data.command}`)
     }
@@ -65,4 +71,10 @@ function leaveRoom(player) {
 
 function setPlayerName(player, name) {
   player.setName(name)
+}
+
+function startGame(player) {
+  if (player.isOwner()) {
+    player.room.startGame()
+  }
 }
