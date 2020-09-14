@@ -1,0 +1,24 @@
+.card {
+  width: 140px;
+  height: 210px;
+  border: 2px solid black;
+  border-radius: 5px;
+  background: linear-gradient(to bottom right, #FFF, #CCC);
+}
+
+.cardText {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.played {
+  opacity: 0.5
+}
+
+.wild {
+  background-image: linear-gradient(to bottom right, var(--rainbow-gradient));
+}

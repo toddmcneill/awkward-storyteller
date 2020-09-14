@@ -22,7 +22,7 @@ export default function RoomInfo() {
 
   return <>
     <div className={styles.header}>
-      <div className={styles.roomTitle}>Room <span className={styles.roomCode}>{appState.roomCode}</span></div>
+      <div className={styles.roomTitle}>Room: <span className={styles.roomCode}>{appState.roomCode}</span></div>
       <Button onClick={handleLeaveRoom}>Leave</Button>
     </div>
     <ul>

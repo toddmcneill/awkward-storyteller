@@ -1,5 +1,6 @@
 const { broadcastToNotInRoom } = require('./player')
 const { Game } = require('./game')
+const faker = require('faker')
 
 const rooms = []
 
@@ -18,7 +19,7 @@ class Room {
     rooms.push(this)
 
     // Send the updated room list to all players not in a room.
-    broadcastToNotInRoom({ event: 'room_list_updated', roomList: formatRooms() })
+    broadcastToNotInRoom({ event: 'room_list_updated', roomList: formatOpenRooms() })
   }
 
   addPlayer(player) {
@@ -40,13 +41,12 @@ class Room {
     this.broadcast({ event: 'player_list_updated', playerList: this.formatPlayerList() })
 
     // Send the player the updated room list.
-    player.send({ event: 'room_list_updated', roomList: formatRooms() })
+    player.send({ event: 'room_list_updated', roomList: formatOpenRooms() })
   }
 
   generateCode() {
     while (true) {
-      // Generate a short, random string
-      const code = Math.random().toString(36).substring(7)
+      const code = `${faker.commerce.productAdjective()} ${faker.address.country()} ${faker.commerce.product()}`
       if (rooms.find(room => room.code === code)) {
         continue
       }
@@ -57,6 +57,17 @@ class Room {
   startGame() {
     this.game.start()
     this.broadcast({ event: 'game_state_updated', game: this.game.format() })
+    broadcastToNotInRoom({ event: 'room_list_updated', roomList: formatOpenRooms() })
+  }
+
+  startRound() {
+    this.game.startRound()
+    this.broadcast({ event: 'game_state_updated', game: this.game.format() })
+  }
+
+  shufflePlayerOrder() {
+    this.players.sort(() => 0.5 - Math.random())
+    this.broadcast({ event: 'player_list_updated', playerList: this.formatPlayerList() })
   }
 
   format() {
@@ -79,8 +90,8 @@ function findRoomByCode(code) {
   return rooms.find(room => room.code === code)
 }
 
-function formatRooms() {
-  return rooms.map(room => room.format())
+function formatOpenRooms() {
+  return rooms.filter(room => !(room.game.isGameStarted)).map(room => room.format())
 }
 
-module.exports = { Room, findRoomByCode, formatRooms }
+module.exports = { Room, findRoomByCode, formatOpenRooms }

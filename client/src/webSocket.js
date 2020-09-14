@@ -50,6 +50,7 @@ export const Events = {
   PLAYER_UPDATED: 'player_updated',
   PLAYER_LIST_UPDATED: 'player_list_updated',
   GAME_STATE_UPDATED: 'game_state_updated',
+  CARD_LIST_UPDATED: 'card_list_updated',
 }
 
 export const Commands = {
@@ -58,4 +59,5 @@ export const Commands = {
   LEAVE_ROOM: 'leave_room',
   SET_PLAYER_NAME: 'set_player_name',
   START_GAME: 'start_game',
+  START_ROUND: 'start_round',
 }

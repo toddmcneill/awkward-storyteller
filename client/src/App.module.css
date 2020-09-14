@@ -5,14 +5,18 @@
   --text-color: black;
   --alt-text-color: white;
   --highlight-color: #646;
+  --rainbow-gradient2: red,orange,yellow,green,blue,indigo,violet;
+  --rainbow-gradient: #FAA, #FCA, #FFA, #AFA, #AAF, #CAF, #FAF;
 }
 
 body {
   margin: 20px;
   min-height: 100%;
-  background-color: var(--bg-color);
   color: var(--alt-text-color);
   font-family: sans-serif;
+  background-image: linear-gradient(to bottom, var(--bg-color), var(--accent-color));
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 ul {

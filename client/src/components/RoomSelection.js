@@ -14,7 +14,6 @@ export default function RoomSelection() {
   }
 
   return <div>
-    <div>Room List:</div>
     <ul>
       {appState.roomList.map((room, i) => {
         return <li key={room.code} className={styles.item}>

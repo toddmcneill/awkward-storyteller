@@ -3,12 +3,15 @@ const players = []
 class Player {
   socket
   id
-  name = 'Unknown Player'
+  name
   room
+  points = 0
+  cards = []
 
   constructor(socket, id) {
     this.socket = socket
     this.id = id
+    this.name = `Player ${players.length + 1}`
     players.push(this)
   }
 
@@ -49,12 +52,22 @@ class Player {
     return this.room.owner === this
   }
 
+  setCards(cards) {
+    this.cards = cards
+    this.send({ event: 'card_list_updated', cards: this.formatCardList() })
+  }
+
   format() {
     return {
       id: this.id,
       name: this.name,
-      isOwner: this.isOwner()
+      isOwner: this.isOwner(),
+      cardCount: this.cards.length
     }
+  }
+
+  formatCardList() {
+    return this.cards.map(card => card.format())
   }
 
   send(message) {

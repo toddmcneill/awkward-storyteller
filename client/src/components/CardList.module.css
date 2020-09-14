@@ -1,0 +1,21 @@
+.cardList {
+  display: flex;
+}
+
+.cardContainer {
+  flex: 1 0 0;
+  overflow: hidden;
+  transition: opacity 0.5s;
+}
+
+.cardContainer:last-child {
+  flex: 0 0 auto;
+}
+
+.selected {
+  overflow: visible;
+}
+
+.unselected {
+  opacity: 0.3;
+}

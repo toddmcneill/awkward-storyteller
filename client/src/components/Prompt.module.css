@@ -1,0 +1,12 @@
+.prompt {
+  width: 240px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--accent-color);
+  color: var(--alt-text-color);
+  border-radius: 5px;
+  padding: 10px;
+}
